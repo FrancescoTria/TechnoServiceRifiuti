@@ -49,11 +49,11 @@
 
         <div class="flex items-center justify-end mt-4">
             <a class="link-nice" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+                Sei già registrato?
             </a>
 
             <x-primary-button class="ms-4">
-                {{ __('Register') }}
+                Registrati
             </x-primary-button>
         </div>
     </form>

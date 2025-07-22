@@ -12,16 +12,27 @@ class AuthLavoratoriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email_lav' => ['required', 'email'],
+            'password_lav' => ['required'],
+        ], [
+            'email_lav.required' => "L'email è obbligatoria",
+            'email_lav.email' => 'Inserisci un indirizzo email valido',
+            'password_lav.required' => 'La password è obbligatoria',
         ]);
 
-        $lavoratore = Lavoratori::where('email', $request->email)->first();
-        if ($lavoratore && Hash::check($request->password, $lavoratore->password)) {
-            // Qui puoi gestire la sessione custom o autenticazione lavoratori
-            // Per ora redirect con messaggio di successo
-            return redirect('/')->with('status', 'Login lavoratore riuscito!');
+        $lavoratore = Lavoratori::where('email', $request->email_lav)->first();
+        if ($lavoratore && Hash::check($request->password_lav, $lavoratore->password)) {
+            Auth::guard('lavoratori')->login($lavoratore);
+            return redirect()->route('dashboard.lavoratore')->with('status', 'Login lavoratore riuscito!');
         }
-        return back()->withErrors(['email' => 'Credenziali non valide'])->withInput();
+        return back()->withErrors(['email_lav' => 'Email o password errati'], 'lavoratore')->withInput();
+    }
+
+    public function create()
+    {
+        if (Auth::guard('lavoratori')->check()) {
+            return redirect()->route('dashboard.lavoratore');
+        }
+        return view('auth.login');
     }
 }

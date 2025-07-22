@@ -65,6 +65,31 @@
             font-size: 1.13em;
             color: #4a5a1c;
         }
+
+        .profile-btn {
+            background: #829B22;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.15em;
+            font-weight: bold;
+            padding: 12px 36px;
+            box-shadow: 0 0 12px 1px #829B2233;
+            transition: box-shadow 0.18s, transform 0.12s;
+            outline: none;
+            letter-spacing: 1px;
+            margin: 0 8px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .profile-btn:hover,
+        .profile-btn:focus {
+            background: #829B22;
+            color: #fff;
+            box-shadow: 0 0 24px 2px #829B2255;
+            transform: translateY(-2px) scale(1.03);
+        }
     </style>
 </head>
 
@@ -73,7 +98,14 @@
         <div class="links">
             <a href="/">Home</a>
             <a href="{{ route('calendario') }}">Calendario</a>
-            <a href="{{ route('profile.edit') }}">Profilo</a>
+            @php
+                $isCittadino = Auth::user() instanceof \App\Models\User;
+                $isLavoratore = Auth::user() instanceof \App\Models\Lavoratori;
+                $isAdmin = $isLavoratore && Auth::user()->admin == 1;
+                $isLavoratoreBase = $isLavoratore && Auth::user()->admin == 0;
+                $profileRoute = $isLavoratore ? route('profile.lavoratore.edit') : route('profile.edit');
+            @endphp
+            <a href="{{ $profileRoute }}">Profilo</a>
             <a href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
@@ -81,8 +113,28 @@
         <h1>Dashboard</h1>
         <div class="welcome">
             <h2>Ciao {{ Auth::user()->nome }} {{ Auth::user()->cognome }}!</h2>
-            <p>Benvenuto nella tua area riservata. Qui puoi gestire il tuo profilo e consultare il calendario della
-                raccolta rifiuti.</p>
+            @php
+                // Determina se è cittadino (tabella users) o lavoratore (tabella lavoratori)
+                $isCittadino = Auth::user() instanceof \App\Models\User;
+                $isLavoratore = Auth::user() instanceof \App\Models\Lavoratori;
+                $isAdmin = $isLavoratore && Auth::user()->admin == 1;
+                $isLavoratoreBase = $isLavoratore && Auth::user()->admin == 0;
+            @endphp
+            @if($isCittadino)
+                <p>Benvenuto nella tua area riservata. Qui puoi gestire il tuo profilo, consultare il calendario e inviare
+                    richieste.</p>
+                <a href="{{ route('avvisi.create') }}" class="profile-btn mt-4">Invia una richiesta</a>
+                <a href="{{ route('avvisi.index') }}" class="profile-btn mt-4">Le tue richieste</a>
+            @elseif($isLavoratoreBase)
+                <p>Benvenuto nell'area lavoratore. Qui puoi inviare avvisi ai cittadini.</p>
+                <a href="{{ route('avvisi.create') }}" class="profile-btn mt-4">Invia avviso a cittadino</a>
+            @elseif($isAdmin)
+                <p>Benvenuto nell'area amministratore. Puoi gestire lavoratori e calendario, oltre a inviare avvisi ai
+                    cittadini.</p>
+                <a href="{{ route('avvisi.create') }}" class="profile-btn mt-4">Invia avviso a cittadino</a>
+                <a href="{{ route('lavoratori.create') }}" class="profile-btn mt-4">Aggiungi lavoratore</a>
+                <a href="{{ route('calendario.edit') }}" class="profile-btn mt-4">Modifica calendario</a>
+            @endif
         </div>
     </div>
 </body>

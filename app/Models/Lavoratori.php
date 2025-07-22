@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
-class Lavoratori extends Model
+class Lavoratori extends Authenticatable
 {
     use HasFactory;
 
@@ -29,5 +29,10 @@ class Lavoratori extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function lavoratore()
+    {
+        return $this->belongsTo(Lavoratori::class, 'id_lavoratore');
     }
 }

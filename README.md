@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="#" target="_blank">
-    <img src="public/logo con bg.png" width="300" alt="TechnoService Logo">
+    <img src="public/logo no bg.png" width="300" alt="TechnoService Logo">
   </a>
 </p>
 

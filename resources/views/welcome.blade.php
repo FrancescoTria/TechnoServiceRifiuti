@@ -159,27 +159,67 @@
 
 <body>
     <div class="container">
-        <h1>Technoservice</h1>
-        <div class="links">
-            @auth
-                <a href="{{ route('dashboard') }}">Dashboard</a>
-                <a href="{{ route('profile.edit') }}">Profilo</a>
-                <a href="{{ route('calendario') }}">Calendario</a>
-                <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+        <div style="text-align:center; margin-bottom: 24px;">
+            <x-application-logo style="margin:0 auto; display:block; width: 180px; height: 180px;" />
+        </div>
+
+        <div class="links" style="text-align:center; margin-bottom:30px;">
+            <a href="/" class="nav-link">Home</a>
+            @auth('lavoratori')
+                <a href="{{ route('dashboard.lavoratore') }}" class="nav-link">Dashboard Lavoratore</a>
+                <a href="{{ route('profile.lavoratore.edit') }}" class="nav-link">Profilo</a>
+                <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                <a href="{{ route('logout.lavoratori') }}" class="nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logout-form-lavoratore').submit();">Logout</a>
+                <form id="logout-form-lavoratore" action="{{ route('logout.lavoratori') }}" method="POST"
+                    style="display: none;">@csrf</form>
             @else
-                <a href="{{ route('login') }}">Accedi</a>
-                <a href="{{ route('register') }}">Registrati</a>
-                <a href="{{ route('calendario') }}">Calendario</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+                    <a href="{{ route('profile.edit') }}" class="nav-link">Profilo</a>
+                    <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                    <a href="{{ route('logout') }}" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                @else
+                    <a href="{{ route('login') }}" class="nav-link">Accedi</a>
+                    <a href="{{ route('register') }}" class="nav-link">Registrati</a>
+                    <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                @endauth
             @endauth
         </div>
-        <div style="text-align:center; margin-bottom: 24px;">
-            <x-application-logo style="margin:0 auto; display:block;" />
-        </div>
+        <style>
+            .links .nav-link {
+                margin: 0 15px;
+                text-decoration: none;
+                color: #829B22;
+                font-weight: bold;
+                font-size: 1.1em;
+                transition: color 0.2s, background 0.2s;
+                padding: 8px 18px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+            .links .nav-link:hover,
+            .links .nav-link:focus {
+                background: #eaf5d0;
+                color: #5d6e18;
+                text-decoration: none;
+            }
+
+            x-application-logo svg,
+            x-application-logo img {
+                width: 180px !important;
+                height: 180px !important;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+
         <!-- Sezione motivazionale -->
-        <div style="margin: 36px 0 0 0; text-align: center;">
-            <span style="font-size:2.2em; color:#829B22; display:block; margin-bottom:10px;">🤝</span>
+        <div class="feature-item"
+            style="background:#eaf5d0; border-radius:16px; box-shadow:0 2px 8px #c6e27b; padding:1px 18px 18px 18px; min-width:170px; max-width:600px; text-align:center; font-size:1.13em; margin:36px auto 0 auto; color:#4a5a1c;">
             <h3 style="color:#829B22; font-size:1.35em; margin-bottom:10px;">Insieme per una città più pulita e
                 sostenibile</h3>
             <p style="color:#4a5a1c; font-size:1.13em; max-width:600px; margin:0 auto;">
@@ -193,8 +233,8 @@
             <div class="feature-list">
                 <div class="feature-item"><span class="feature-emoji">📅</span>Consulta facilmente il calendario della
                     raccolta rifiuti</div>
-                <div class="feature-item"><span class="feature-emoji">🔔</span>Ricevi notifiche sulle variazioni del
-                    servizio</div>
+                <div class="feature-item"><span class="feature-emoji">🔔</span>Per qualsiasi problema contattaci tramite
+                    la sezione richieste! </div>
                 <div class="feature-item"><span class="feature-emoji">📱</span>Accedi da qualsiasi dispositivo</div>
                 <div class="feature-item"><span class="feature-emoji">🌱</span>Rispetta l'ambiente con info aggiornate
                 </div>

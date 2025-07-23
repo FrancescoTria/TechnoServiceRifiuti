@@ -56,33 +56,38 @@
             margin-bottom: 30px;
         }
 
-        .links a {
+        .links .nav-link {
             margin: 0 15px;
             text-decoration: none;
             color: #829B22;
-            font-weight: bold !important;
-            /* Forza il grassetto come in dashboard */
+            font-weight: bold;
             font-size: 1.1em;
-            transition: color 0.2s;
+            transition: color 0.2s, background 0.2s;
+            padding: 8px 18px;
+            border-radius: 8px;
+            display: inline-block;
         }
 
-        .links a:hover {
-            color: #829B22;
+        .links .nav-link:hover,
+        .links .nav-link:focus {
+            background: #eaf5d0;
+            color: #5d6e18;
+            text-decoration: none;
         }
     </style>
     <div class="container-avvisi-list">
-        <h1 class="avvisi-title">Le tue richieste</h1>
+        <h1 class="avvisi-title">Avvisi ricevuti dai lavoratori</h1>
         <div class="links">
-            <a href="/">Home</a>
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <a href="{{ route('calendario') }}">Calendario</a>
-            <a href="{{ route('profile.edit') }}">Profilo</a>
-            <a href="{{ route('logout') }}"
+            <a href="/" class="nav-link">Home</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+            <a href="{{ route('profile.edit') }}" class="nav-link">Profilo</a>
+            <a href="{{ route('logout') }}" class="nav-link"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
         </div>
         @if($avvisi->isEmpty())
-            <div class="no-avvisi">Non hai ancora inviato nessun avviso.</div>
+            <div class="no-avvisi">Non hai ancora ricevuto nessun avviso.</div>
         @else
             <table class="avvisi-table">
                 <thead>

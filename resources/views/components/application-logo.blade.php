@@ -1,1 +1,1 @@
-<img src="/logo%20no%20bg.png" alt="Logo" width="120" height="120" style="max-width:120px; max-height:120px;" {{ $attributes }} />
+<img src="/logo%20no%20bg.png" alt="Logo" width="240" height="200" style="max-width:20000px; max-height:180px;" {{ $attributes }} />

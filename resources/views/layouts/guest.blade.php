@@ -161,12 +161,6 @@
 
 <body>
     <div class="container">
-        <div class="links">
-            <a href="/">Home</a>
-            <a href="{{ route('login') }}">Accedi</a>
-            <a href="{{ route('register') }}">Registrati</a>
-            <a href="{{ route('calendario') }}">Calendario</a>
-        </div>
         <div class="guest-content">
             {{ $slot }}
         </div>

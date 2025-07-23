@@ -10,6 +10,10 @@ class Calendario extends Model
     use HasFactory;
 
     protected $table = 'calendario';
+    protected $primaryKey = 'giorno';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = false;
     // Se la tabella non ha timestamps, decommenta la riga sotto:
     // public $timestamps = false;
     // protected $fillable = ['colonna1', 'colonna2', ...];

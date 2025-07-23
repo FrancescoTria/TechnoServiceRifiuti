@@ -170,13 +170,35 @@
 <body>
     <div class="container">
         <div class="links">
-            <a href="/">Home</a>
-            <a href="{{ route('calendario') }}">Calendario</a>
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <a href="{{ route('logout') }}"
+            <a href="/" class="nav-link">Home</a>
+            <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ route('profile.edit') }}" class="nav-link"
+                style="background: #eaf5d0; color: #5d6e18;">Profilo</a>
+            <a href="{{ route('logout') }}" class="nav-link"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
         </div>
+        <style>
+            .links .nav-link {
+                margin: 0 15px;
+                text-decoration: none;
+                color: #829B22;
+                font-weight: bold;
+                font-size: 1.1em;
+                transition: color 0.2s, background 0.2s;
+                padding: 8px 18px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+            .links .nav-link:hover,
+            .links .nav-link:focus {
+                background: #eaf5d0;
+                color: #5d6e18;
+                text-decoration: none;
+            }
+        </style>
         <h1>Profilo</h1>
 
         <div class="profile-forms">

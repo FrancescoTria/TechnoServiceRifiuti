@@ -25,6 +25,8 @@ class Lavoratori extends Authenticatable
         'password',
     ];
 
+    public $timestamps = false;
+
     // Crittografa la password quando viene settata
     public function setPasswordAttribute($value)
     {

@@ -35,4 +35,12 @@ class AuthLavoratoriController extends Controller
         }
         return view('auth.login');
     }
+
+    public function logoutLavoratore(Request $request)
+    {
+        Auth::guard('lavoratori')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
 }

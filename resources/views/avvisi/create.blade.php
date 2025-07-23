@@ -137,11 +137,6 @@
         <form method="POST" action="{{ route('avvisi.store') }}" class="avvisi-form">
             @csrf
             <input type="hidden" name="categoria" value="Richiesta">
-            <div class="mb-4">
-                <label for="messaggio">Messaggio</label>
-                <textarea name="messaggio" id="messaggio" rows="4" required>{{ old('messaggio') }}</textarea>
-                @error('messaggio')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
-            </div>
             @if(Auth::check() && (!isset(Auth::user()->admin) || Auth::user()->admin == 0))
                 <input type="hidden" name="id_lavoratore" value="1">
                 <div class="mb-4">
@@ -170,6 +165,11 @@
                     @error('oggetto')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
             @endif
+            <div class="mb-4">
+                <label for="messaggio">Messaggio</label>
+                <textarea name="messaggio" id="messaggio" rows="4" required>{{ old('messaggio') }}</textarea>
+                @error('messaggio')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
+            </div>
             <button type="submit" class="avvisi-form-btn">Invia Avviso</button>
         </form>
     </div>

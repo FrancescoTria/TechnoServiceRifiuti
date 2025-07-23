@@ -86,22 +86,52 @@
 
 <body>
     <div class="container">
-        <div class="links">
-            <a href="/">Home</a>
-            @auth
-                <a href="{{ route('dashboard') }}">Dashboard</a>
-                <a href="{{ route('profile.edit') }}">Profilo</a>
-                <a href="{{ route('calendario') }}">Calendario</a>
-                <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+        <h1>Calendario Settimanale Raccolta Rifiuti</h1>
+        <div class="links" style="text-align:center; margin-bottom:30px;">
+            <a href="/" class="nav-link">Home</a>
+            @auth('lavoratori')
+                <a href="{{ route('dashboard.lavoratore') }}" class="nav-link">Dashboard Lavoratore</a>
+                <a href="{{ route('profile.lavoratore.edit') }}" class="nav-link">Profilo</a>
+                <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                <a href="{{ route('logout.lavoratori') }}" class="nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logout-form-lavoratore').submit();">Logout</a>
+                <form id="logout-form-lavoratore" action="{{ route('logout.lavoratori') }}" method="POST"
+                    style="display: none;">@csrf</form>
             @else
-                <a href="{{ route('login') }}">Accedi</a>
-                <a href="{{ route('register') }}">Registrati</a>
-                <a href="{{ route('calendario') }}">Calendario</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+                    <a href="{{ route('profile.edit') }}" class="nav-link">Profilo</a>
+                    <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                    <a href="{{ route('logout') }}" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                @else
+                    <a href="{{ route('login') }}" class="nav-link">Accedi</a>
+                    <a href="{{ route('register') }}" class="nav-link">Registrati</a>
+                    <a href="{{ route('calendario') }}" class="nav-link">Calendario</a>
+                @endauth
             @endauth
         </div>
-        <h1>Calendario Settimanale Raccolta Rifiuti</h1>
+        <style>
+            .links .nav-link {
+                margin: 0 15px;
+                text-decoration: none;
+                color: #829B22;
+                font-weight: bold;
+                font-size: 1.1em;
+                transition: color 0.2s, background 0.2s;
+                padding: 8px 18px;
+                border-radius: 8px;
+                display: inline-block;
+            }
+
+            .links .nav-link:hover,
+            .links .nav-link:focus {
+                background: #eaf5d0;
+                color: #5d6e18;
+                text-decoration: none;
+            }
+        </style>
         <table>
             <tr>
                 <th>Giorno</th>

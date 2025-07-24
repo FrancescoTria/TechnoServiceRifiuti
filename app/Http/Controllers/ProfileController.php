@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Indirizzi;
 
 class ProfileController extends Controller
 {
@@ -16,8 +17,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $indirizzi = Indirizzi::all();
         return view('profile.edit', [
             'user' => $request->user(),
+            'indirizzi' => $indirizzi,
         ]);
     }
 
@@ -26,13 +29,27 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Controllo che la via esista
+        $indirizzi = Indirizzi::where('nome_indirizzo', $request->input('indirizzo'))->get();
+        if ($indirizzi->isEmpty()) {
+            return back()->withErrors(['indirizzo' => 'La via selezionata non esiste.'])->withInput();
+        }
+        // Trova o crea l'indirizzo (con civico e CAP)
+        $indirizzo = Indirizzi::firstOrCreate([
+            'nome_indirizzo' => $request->input('indirizzo'),
+            'civico' => $request->input('civico'),
+            'CAP' => $request->input('CAP'),
+        ]);
+        $user->id_indirizzo = $indirizzo->id_indirizzo;
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

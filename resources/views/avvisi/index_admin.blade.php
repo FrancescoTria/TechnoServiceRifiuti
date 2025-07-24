@@ -74,6 +74,12 @@
             color: #5d6e18;
             text-decoration: none;
         }
+
+        .avvisi-table td.messaggio-col {
+            max-width: 320px;
+            word-break: break-word;
+            white-space: pre-line;
+        }
     </style>
     <div class="container-avvisi-list">
         <h1 class="avvisi-title">Tutte le richieste dei clienti</h1>
@@ -119,7 +125,7 @@
                                 @endif
                             </td>
                             <td>{{ $avviso->oggetto }}</td>
-                            <td>{{ $avviso->messaggio }}</td>
+                            <td class="messaggio-col">{{ $avviso->messaggio }}</td>
                         </tr>
                     @endforeach
                 </tbody>

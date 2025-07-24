@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Indirizzi;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $indirizzi = Indirizzi::all();
+        return view('auth.register', compact('indirizzi'));
     }
 
     /**
@@ -34,13 +36,27 @@ class RegisteredUserController extends Controller
             'cognome' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'indirizzo' => ['required', 'string', 'max:255'],
+        ]);
+
+        // Trova indirizzi con quel nome
+        $indirizzi = Indirizzi::where('nome_indirizzo', $request->input('indirizzo'))->get();
+        if ($indirizzi->isEmpty()) {
+            return back()->withErrors(['indirizzo' => 'La via selezionata non esiste.'])->withInput();
+        }
+        // Trova o crea l'indirizzo (con civico e CAP)
+        $indirizzo = Indirizzi::firstOrCreate([
+            'nome_indirizzo' => $request->input('indirizzo'),
+            'civico' => $request->input('civico'),
+            'CAP' => $request->input('CAP'),
         ]);
 
         $user = User::create([
-            'nome' => $request->nome,
-            'cognome' => $request->cognome,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'nome' => $request->input('nome'),
+            'cognome' => $request->input('cognome'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'id_indirizzo' => $indirizzo->getAttribute('id_indirizzo'),
         ]);
 
         event(new Registered($user));

@@ -28,12 +28,12 @@ class AvvisiController extends Controller
 
         Log::info('Dati ricevuti per avviso', $request->all());
         $avviso = Avvisi::create([
-            'categoria' => $request->categoria,
-            'messaggio' => $request->messaggio,
+            'categoria' => $request->input('categoria'),
+            'messaggio' => $request->input('messaggio'),
             'data_invio' => Carbon::now(),
             'id_cliente' => Auth::id(),
-            'id_lavoratore' => $request->id_lavoratore,
-            'oggetto' => $request->oggetto,
+            'id_lavoratore' => $request->input('id_lavoratore'),
+            'oggetto' => $request->input('oggetto'),
         ]);
         Log::info('Avviso creato', ['avviso' => $avviso]);
 
@@ -43,7 +43,9 @@ class AvvisiController extends Controller
     // Mostra tutti gli avvisi inviati dal cittadino autenticato
     public function index()
     {
-        $avvisi = Avvisi::where('id_cliente', Auth::id())->orderByDesc('data_invio')->get();
+        $avvisi = Avvisi::where('id_cliente', Auth::id())
+            ->where('categoria', 'Richiesta')
+            ->orderByDesc('data_invio')->get();
         return view('avvisi.index', compact('avvisi'));
     }
 
@@ -72,10 +74,10 @@ class AvvisiController extends Controller
         ]);
         $avviso = Avvisi::create([
             'categoria' => 'Avviso',
-            'messaggio' => $request->messaggio,
+            'messaggio' => $request->input('messaggio'),
             'data_invio' => now(),
-            'id_cliente' => $request->id_cliente,
-            'id_lavoratore' => $lavoratore->id_lavoratore,
+            'id_cliente' => $request->input('id_cliente'),
+            'id_lavoratore' => ($lavoratore instanceof \App\Models\Lavoratori) ? $lavoratore->id_lavoratore : null,
             'oggetto' => 'Avviso rifiuto non conforme',
         ]);
         return redirect()->route('avvisi.create-avviso-cliente')->with('success', 'Avviso inviato al cittadino!');
@@ -87,7 +89,8 @@ class AvvisiController extends Controller
         $lavoratore = Auth::guard('lavoratori')->user();
         if (!$lavoratore)
             abort(403);
-        $avvisi = \App\Models\Avvisi::where('id_lavoratore', $lavoratore->id_lavoratore)
+        $idLavoratore = ($lavoratore instanceof \App\Models\Lavoratori) ? $lavoratore->id_lavoratore : null;
+        $avvisi = \App\Models\Avvisi::where('id_lavoratore', $idLavoratore)
             ->where('categoria', 'Avviso')
             ->orderByDesc('data_invio')->get();
         return view('avvisi.index_lavoratore', compact('avvisi'));
@@ -97,7 +100,7 @@ class AvvisiController extends Controller
     public function indexAdmin()
     {
         $lavoratore = Auth::guard('lavoratori')->user();
-        if (!$lavoratore || $lavoratore->admin != 1)
+        if (!$lavoratore || !($lavoratore instanceof \App\Models\Lavoratori) || $lavoratore->admin != 1)
             abort(403);
         $avvisi = \App\Models\Avvisi::where('categoria', 'Richiesta')->orderByDesc('data_invio')->get();
         return view('avvisi.index_admin', compact('avvisi'));

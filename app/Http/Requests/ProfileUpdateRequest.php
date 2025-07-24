@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property int $id
+ */
 class ProfileUpdateRequest extends FormRequest
 {
     /**
@@ -26,6 +29,7 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'indirizzo' => ['required', 'string', 'max:255'],
         ];
     }
 }

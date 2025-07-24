@@ -112,6 +112,52 @@
                 @endauth
             @endauth
         </div>
+        <form method="GET" action="{{ route('calendario') }}" style="margin-bottom: 24px; text-align:center;">
+            <label for="cap" style="font-weight:bold; color:#829B22; font-size:1.1em;">Inserisci il CAP:</label>
+            <select id="cap" name="cap"
+                style="padding:8px; border-radius:6px; border:2px solid #829B22; margin:0 10px; width:140px;">
+                <option value="">Seleziona CAP</option>
+                @foreach(\App\Models\Calendario::select('CAP')->distinct()->orderBy('CAP')->get() as $cap)
+                    <option value="{{ $cap->CAP }}" @if(request('cap') == $cap->CAP) selected @endif>{{ $cap->CAP }}</option>
+                @endforeach
+            </select>
+            <button type="submit"
+                style="background:#829B22; color:#fff; border:none; border-radius:8px; padding:8px 18px; font-weight:bold;">Cerca</button>
+        </form>
+        @if(isset($errore_cap))
+            <div style="color:#b30000; text-align:center; margin-bottom:20px; font-weight:bold;">{{ $errore_cap }}</div>
+        @endif
+        @if(isset($calendario))
+            <table style="margin-top: 10px; table-layout: fixed; width: 100%;">
+                <tr>
+                    <th style="width: 20%;">Giorno</th>
+                    <th style="width: 40%;">Rifiuto</th>
+                </tr>
+                @php
+                    $giorniSettimana = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+                @endphp
+                @foreach($calendario as $row)
+                    @foreach($giorniSettimana as $giorno)
+                        <tr>
+                            <td style="width: 20%; text-transform: capitalize;">{{ $giorno }}</td>
+                            <td style="width: 40%;">{{ $row->$giorno }}</td>
+                        </tr>
+                    @endforeach
+                @endforeach
+            </table>
+            @php
+                $fasce = $calendario->pluck('fascia_oraria_')->unique()->filter();
+            @endphp
+            @if($fasce->count())
+                <div style="margin-top: 18px; text-align: center; color: #333; font-weight:bold;">
+                    Fascia oraria: {{ $fasce->implode(' / ') }}
+                </div>
+            @endif
+            <div style="margin-top: 30px; text-align: center; color: #333;">
+                <p>Consulta sempre il calendario per una raccolta differenziata corretta.<br>
+                    Per variazioni o festività, controlla le comunicazioni nella tua area riservata.</p>
+            </div>
+        @endif
         <style>
             .links .nav-link {
                 margin: 0 15px;
@@ -132,25 +178,6 @@
                 text-decoration: none;
             }
         </style>
-        <table>
-            <tr>
-                <th>Giorno</th>
-                <th>Rifiuto</th>
-                <th>Fascia oraria</th>
-            </tr>
-            @foreach($giorni as $riga)
-                <tr>
-                    <td>{{ $riga->giorno }}</td>
-                    <td>{{ $riga->rifiuto }}</td>
-                    <td>{{ $riga->fascia_oraria ? \Carbon\Carbon::createFromFormat('H:i:s', $riga->fascia_oraria)->format('H:i') : '' }}
-                    </td>
-                </tr>
-            @endforeach
-        </table>
-        <div style="margin-top: 30px; text-align: center; color: #333;">
-            <p>Consulta sempre il calendario per una raccolta differenziata corretta.<br>
-                Per variazioni o festività, controlla le comunicazioni nella tua area riservata.</p>
-        </div>
     </div>
 </body>
 

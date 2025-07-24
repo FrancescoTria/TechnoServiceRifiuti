@@ -17,7 +17,7 @@
 </head>
 
 <body class="font-sans antialiased" style="background: #eaf5d0;">
-    <div class="min-h-screen">
+    <div class="min-h-screen" style="display:flex; flex-direction:column; min-height:100vh;">
         <!-- Page Heading -->
         @isset($header)
             <header class="bg-white dark:bg-gray-800 shadow">
@@ -28,7 +28,7 @@
         @endisset
 
         <!-- Page Content -->
-        <main>
+        <main style="flex:1 0 auto;">
             @yield('content')
         </main>
     </div>

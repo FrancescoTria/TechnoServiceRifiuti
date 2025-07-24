@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @property int $id_lavoratore
+ * @property string $password
+ * @property string $nome
+ * @property string $cognome
+ * @property string $email
+ * @property int $admin
+ */
 class Lavoratori extends Authenticatable
 {
     use HasFactory;

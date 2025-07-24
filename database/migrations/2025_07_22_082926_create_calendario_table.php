@@ -11,20 +11,16 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('calendario', function (Blueprint $table) {
-            $table->string('giorno');
-            $table->string('rifiuto');
-            $table->time('fascia_oraria')->nullable();
-        });
-
-        // Creo la tabella lavoratori
-        Schema::create('lavoratori', function (Blueprint $table) {
-            $table->id('id_lavoratore');
-            $table->string('nome');
-            $table->string('cognome');
-            $table->boolean('admin')->default(false);
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->timestamps();
+            $table->string('CAP', 10);
+            $table->string('fascia_oraria_', 50);
+            $table->string('lunedì', 50)->nullable();
+            $table->string('martedì', 50)->nullable();
+            $table->string('mercoledì', 50)->nullable();
+            $table->string('giovedì', 50)->nullable();
+            $table->string('venerdì', 50)->nullable();
+            $table->string('sabato', 50)->nullable();
+            $table->string('domenica', 50)->nullable();
+            $table->primary(['CAP']);
         });
     }
 
@@ -34,6 +30,5 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('calendario');
-        Schema::dropIfExists('lavoratori');
     }
 };

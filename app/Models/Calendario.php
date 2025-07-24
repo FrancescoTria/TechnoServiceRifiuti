@@ -10,7 +10,7 @@ class Calendario extends Model
     use HasFactory;
 
     protected $table = 'calendario';
-    protected $primaryKey = 'giorno';
+    protected $primaryKey = 'CAP';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
